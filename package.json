@@ -12,7 +12,9 @@
     "test:e2e": "playwright test",
     "check": "npm run typecheck && npm run lint && npm test && npm run build",
     "prisma:generate": "prisma generate",
+    "postinstall": "prisma generate",
     "db:migrate": "prisma migrate dev",
+    "db:deploy": "prisma migrate deploy",
     "db:seed": "prisma db seed",
     "db:studio": "prisma studio"
   },
