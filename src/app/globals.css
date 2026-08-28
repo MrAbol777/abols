@@ -1,0 +1,117 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+   Abol Store design system — dark premium (black / gold / silver)
+   Tailwind v4 tokens. Utilities like bg-surface, text-gold, border-border
+   are generated from these --color-* variables.
+--------------------------------------------------------------------------- */
+@theme {
+  --color-background: #0a0a0b;
+  --color-surface: #131316;
+  --color-elevated: #1c1c22;
+  --color-gold: #d4af37;
+  --color-gold-hover: #e7c452;
+  --color-silver: #c8ccd4;
+  --color-foreground: #f4f4f6;
+  --color-muted: #9a9ca6;
+  --color-border: #26262e;
+  --color-success: #3fb950;
+  --color-warning: #d6a419;
+  --color-danger: #ef5350;
+
+  --font-sans: "Vazirmatn Variable", ui-sans-serif, system-ui, "Segoe UI",
+    Tahoma, Arial, sans-serif;
+
+  --radius-xl: 1rem;
+  --radius-2xl: 1.25rem;
+}
+
+/* Base ---------------------------------------------------------------------- */
+* {
+  border-color: var(--color-border);
+}
+
+html {
+  color-scheme: dark;
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+  /* Subtle premium radial glows in brand gold/silver */
+  background-image:
+    radial-gradient(60rem 60rem at 100% -10%, rgba(212, 175, 55, 0.06), transparent 60%),
+    radial-gradient(50rem 50rem at -10% 10%, rgba(200, 204, 212, 0.04), transparent 55%);
+  background-attachment: fixed;
+  overflow-x: hidden;
+  line-height: 1.7;
+}
+
+/* Persian numerals + comfortable reading for numbers where needed */
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Accessible visible focus everywhere */
+:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Selection */
+::selection {
+  background: rgba(212, 175, 55, 0.3);
+  color: #fff;
+}
+
+/* Custom slim scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-background);
+}
+::-webkit-scrollbar-thumb {
+  background: #2f2f37;
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3b3b45;
+}
+
+/* Brand wordmark used by the logo fallback */
+.brand-wordmark {
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  background: linear-gradient(180deg, #f6e7ad 0%, var(--color-gold) 60%, #a9832b 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Reusable gradient hairline */
+.gold-hairline {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(212, 175, 55, 0.6),
+    transparent
+  );
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
