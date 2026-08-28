@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/auth/admin";
 import { categorySchema, productSchema } from "@/lib/schemas";
+import { saveProductImage } from "@/lib/product-images";
 
 export type CatalogActionState = {
   status?: "idle" | "success" | "error";
@@ -89,7 +90,22 @@ export async function createProductAction(
   formData: FormData,
 ): Promise<CatalogActionState> {
   await requireAdmin();
+
+  let uploadedMediaUrl: string | undefined;
+  const imageFile = formData.get("imageFile");
+  if (imageFile && typeof imageFile === "object" && "size" in imageFile && (imageFile as File).size > 0) {
+    const uploadRes = await saveProductImage(imageFile as File);
+    if (!uploadRes.ok) {
+      return { status: "error", message: uploadRes.error, fieldErrors: { mediaUrl: uploadRes.error } };
+    }
+    uploadedMediaUrl = uploadRes.url;
+  }
+
   const input = buildProductInput(formData);
+  if (uploadedMediaUrl) {
+    input.mediaUrl = uploadedMediaUrl;
+  }
+
   const parsed = productSchema.safeParse(input);
   if (!parsed.success) {
     const errors: Record<string, string> = {};
@@ -148,7 +164,23 @@ export async function updateProductAction(
 ): Promise<CatalogActionState> {
   await requireAdmin();
   const id = String(formData.get("id") ?? "");
+  if (!id) return { status: "error", message: "شناسه محصول نامعتبر است." };
+
+  let uploadedMediaUrl: string | undefined;
+  const imageFile = formData.get("imageFile");
+  if (imageFile && typeof imageFile === "object" && "size" in imageFile && (imageFile as File).size > 0) {
+    const uploadRes = await saveProductImage(imageFile as File);
+    if (!uploadRes.ok) {
+      return { status: "error", message: uploadRes.error, fieldErrors: { mediaUrl: uploadRes.error } };
+    }
+    uploadedMediaUrl = uploadRes.url;
+  }
+
   const input = buildProductInput(formData);
+  if (uploadedMediaUrl) {
+    input.mediaUrl = uploadedMediaUrl;
+  }
+
   const parsed = productSchema.safeParse(input);
   if (!parsed.success) {
     const errors: Record<string, string> = {};

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useActionState } from "react";
 import {
   createProductAction,
@@ -48,6 +48,27 @@ export function ProductForm({
 }) {
   const action = product ? updateProductAction : createProductAction;
   const [state, formAction, pending] = useActionState(action, initial);
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(product?.media[0]?.url ?? null);
+  const [mediaUrlInput, setMediaUrlInput] = useState<string>(product?.media[0]?.url ?? "");
+  const [showUrlInput, setShowUrlInput] = useState(false);
+
+  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (file) {
+      const url = URL.createObjectURL(file);
+      setPreviewUrl(url);
+    }
+  }
+
+  function handleRemoveImage() {
+    setPreviewUrl(null);
+    setMediaUrlInput("");
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  }
 
   const [attributes, setAttributes] = useState<AttrRow[]>(
     product?.attributes.map((a) => ({ key: a.key, label: a.label, value: a.value })) ?? [],
@@ -177,11 +198,119 @@ export function ProductForm({
         </div>
       </Section>
 
-      <Section title="تصویر (اختیاری)">
-        <div className={fieldWrap}>
-          <label className={labelCls} htmlFor="mediaUrl">آدرس تصویر</label>
-          <input id="mediaUrl" name="mediaUrl" dir="ltr" defaultValue={product?.media[0]?.url ?? ""} placeholder="https://..." className={inputCls} />
-          <p className="text-[11px] text-muted">در صورت نبودن تصویر، یک نشان اختصاصی نوع محصول نمایش داده می‌شود.</p>
+      <Section title="تصویر محصول">
+        <div className="flex flex-col gap-4">
+          <input
+            ref={fileInputRef}
+            id="imageFile"
+            name="imageFile"
+            type="file"
+            accept="image/png,image/jpeg,image/webp"
+            className="hidden"
+            onChange={handleFileChange}
+          />
+          <input type="hidden" name="mediaUrl" value={mediaUrlInput} />
+
+          {previewUrl ? (
+            <div className="flex flex-col items-start gap-4 rounded-2xl border border-border bg-elevated/40 p-4 sm:flex-row sm:items-center">
+              <div className="relative h-32 w-32 shrink-0 overflow-hidden rounded-2xl border-2 border-gold/50 bg-surface shadow-md">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={previewUrl}
+                  alt="پیش‌نمایش تصویر محصول"
+                  className="h-full w-full object-cover"
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <span className="flex items-center gap-1.5 text-xs font-semibold text-emerald-400">
+                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  تصویر انتخاب شده و آماده ذخیره است
+                </span>
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="rounded-xl border border-gold/40 bg-gold/10 px-3.5 py-1.5 text-xs font-bold text-gold transition-colors hover:bg-gold hover:text-black"
+                  >
+                    تغییر تصویر
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleRemoveImage}
+                    className="rounded-xl border border-danger/40 bg-danger/10 px-3.5 py-1.5 text-xs font-bold text-danger transition-colors hover:bg-danger hover:text-white"
+                  >
+                    حذف تصویر
+                  </button>
+                </div>
+                <p className="text-[11px] text-muted">حجم مجاز حداکثر ۵ مگابایت (JPG، PNG، WebP)</p>
+              </div>
+            </div>
+          ) : (
+            <div
+              onClick={() => fileInputRef.current?.click()}
+              onDragOver={(e) => e.preventDefault()}
+              onDrop={(e) => {
+                e.preventDefault();
+                const file = e.dataTransfer.files?.[0];
+                if (file && fileInputRef.current) {
+                  const dt = new DataTransfer();
+                  dt.items.add(file);
+                  fileInputRef.current.files = dt.files;
+                  setPreviewUrl(URL.createObjectURL(file));
+                }
+              }}
+              className="flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-border/80 bg-elevated/50 px-6 py-8 text-center transition-all hover:border-gold hover:bg-elevated/90"
+            >
+              <div className="mb-3 flex h-14 w-14 items-center justify-center rounded-2xl bg-surface text-gold shadow-md">
+                <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={1.8}
+                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                  />
+                </svg>
+              </div>
+              <span className="text-sm font-bold text-foreground">
+                برای انتخاب و آپلود تصویر از دستگاه خود کلیک کنید
+              </span>
+              <span className="mt-1 text-xs text-muted">
+                یا تصویر را بکشید و در این کادر رها کنید (JPG، PNG یا WebP تا سقف ۵ مگابایت)
+              </span>
+            </div>
+          )}
+
+          {err("mediaUrl")}
+
+          {/* Toggle for external URL */}
+          <div className="pt-1">
+            <button
+              type="button"
+              onClick={() => setShowUrlInput(!showUrlInput)}
+              className="text-xs text-gold/80 hover:text-gold hover:underline"
+            >
+              {showUrlInput ? "− بستن کادر آدرس اینترنتی" : "+ استفاده از لینک اینترنتی به جای فایل (اختیاری)"}
+            </button>
+            {showUrlInput ? (
+              <div className="mt-2 flex flex-col gap-1">
+                <input
+                  dir="ltr"
+                  value={mediaUrlInput}
+                  onChange={(e) => {
+                    setMediaUrlInput(e.target.value);
+                    setPreviewUrl(e.target.value || null);
+                  }}
+                  placeholder="https://example.com/image.png"
+                  className={inputCls}
+                />
+                <span className="text-[11px] text-muted">
+                  اگر مایلید به جای آپلود، آدرس مستقیم تصویر در اینترنت را قرار دهید.
+                </span>
+              </div>
+            ) : null}
+          </div>
         </div>
       </Section>
 

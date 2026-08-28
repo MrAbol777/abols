@@ -19,8 +19,22 @@ describe("order queries (real DB)", () => {
   let orderId: string;
 
   beforeAll(async () => {
-    const found = await prisma.product.findUnique({ where: { slug: "cp-420" } });
-    if (!found) throw new Error("seed data missing: run npm run db:seed");
+    let found = await prisma.product.findFirst();
+    if (!found) {
+      const cat =
+        (await prisma.category.findFirst()) ||
+        (await prisma.category.create({
+          data: { name: "تست", slug: "test-cat" },
+        }));
+      found = await prisma.product.create({
+        data: {
+          name: "محصول آزمایشی تست",
+          slug: `test-prod-${Date.now()}`,
+          price: 50000,
+          categoryId: cat.id,
+        },
+      });
+    }
     product = { id: found.id, name: found.name, price: found.price };
   });
 

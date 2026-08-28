@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
 import { SupportWidget } from "./SupportWidget";
+import { MobileBottomNav } from "./MobileBottomNav";
 
 /**
  * Wraps public pages with the storefront header, footer and floating support
@@ -36,13 +37,14 @@ export function SiteChrome({
   return (
     <>
       <Header brandName={brandName} customerSignedIn={customerSignedIn} />
-      <main className="flex-1">{children}</main>
+      <main className="flex-1 pb-16 lg:pb-0">{children}</main>
       <Footer brandName={brandName} telegramUrl={telegramUrl} rubikaUrl={rubikaUrl} />
       <SupportWidget
         supportText={supportText}
         telegramUrl={telegramUrl}
         rubikaUrl={rubikaUrl}
       />
+      <MobileBottomNav customerSignedIn={customerSignedIn} />
     </>
   );
 }

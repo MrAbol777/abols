@@ -4,7 +4,7 @@ set -e
 echo "🚀 [Hamravesh Darkube] Starting Abol Store container..."
 
 # Ensure required persistent storage directories exist
-mkdir -p /app/data /app/public/uploads/receipts
+mkdir -p /app/data/uploads/products /app/data/uploads/receipts /app/public/uploads/products /app/public/uploads/receipts
 
 # Run Prisma database migrations to ensure tables exist
 if [ -f "./prisma/schema.prisma" ]; then

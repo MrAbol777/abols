@@ -45,7 +45,7 @@ export function SupportWidget({
         type="button"
         onClick={() => setOpen(true)}
         aria-label="پشتیبانی"
-        className="fixed bottom-5 left-5 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-gold text-black shadow-[0_10px_30px_-8px_rgba(212,175,55,0.7)] transition-transform hover:scale-105 focus-visible:outline-gold"
+        className="fixed bottom-20 left-4 lg:bottom-5 lg:left-5 z-50 flex h-13 w-13 sm:h-14 sm:w-14 items-center justify-center rounded-full bg-gold text-black shadow-[0_10px_30px_-8px_rgba(212,175,55,0.7)] transition-transform hover:scale-105 focus-visible:outline-gold"
       >
         <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden>
           <path
