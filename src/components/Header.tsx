@@ -164,19 +164,36 @@ export function Header({
         </div>
       </header>
 
-      {/* Mobile nav — fixed to the viewport, NOT inside the blurred header */}
+      {/* Mobile nav — fixed to the viewport with header and close button */}
       {mobileOpen ? (
         <div
           id="mobile-menu"
-          className="fixed inset-0 z-50 flex flex-col bg-background lg:hidden"
+          className="fixed inset-0 z-[70] flex flex-col bg-background/98 backdrop-blur-2xl lg:hidden"
           onClick={() => setMobileOpen(false)}
           role="dialog"
           aria-modal="true"
           aria-label="منوی موبایل"
         >
-          <div className="flex flex-1 flex-col overflow-y-auto px-4 pb-8 pt-4" onClick={(e) => e.stopPropagation()}>
+          <div className="flex flex-1 flex-col overflow-y-auto px-4 pb-10 pt-3" onClick={(e) => e.stopPropagation()}>
+            {/* Top Bar with Logo and prominent Close button */}
+            <div className="flex items-center justify-between border-b border-border/80 pb-3 pt-1">
+              <Link href="/" onClick={() => setMobileOpen(false)} aria-label={brandName}>
+                <Logo brandName={brandName} />
+              </Link>
+              <button
+                type="button"
+                className="flex h-11 w-11 items-center justify-center rounded-xl border border-border bg-elevated text-foreground shadow-sm transition-colors hover:border-gold hover:bg-gold/10 hover:text-gold focus-visible:outline-gold"
+                onClick={() => setMobileOpen(false)}
+                aria-label="بستن منو"
+              >
+                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
             {/* Primary nav */}
-            <p className="px-2 pb-2 pt-3 text-[11px] font-semibold uppercase tracking-widest text-muted">
+            <p className="px-2 pb-2 pt-4 text-[11px] font-semibold uppercase tracking-widest text-muted">
               منوی اصلی
             </p>
             <nav className="flex flex-col gap-1.5" aria-label="موبایل">
@@ -229,6 +246,20 @@ export function Header({
                 </span>
                 {customerSignedIn ? "حساب کاربری" : "ورود / ثبت‌نام"}
               </Link>
+            </div>
+
+            {/* Bottom close button */}
+            <div className="mt-8 pt-4 border-t border-border/60">
+              <button
+                type="button"
+                onClick={() => setMobileOpen(false)}
+                className="flex w-full items-center justify-center gap-2 rounded-xl border border-border bg-elevated py-3 text-sm font-semibold text-muted transition-colors hover:border-gold/40 hover:text-foreground"
+              >
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+                بستن منو
+              </button>
             </div>
           </div>
         </div>
