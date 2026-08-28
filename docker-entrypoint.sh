@@ -16,7 +16,12 @@ fi
 if [ -n "$ADMIN_PHONE" ] && [ -n "$ADMIN_PASSWORD" ]; then
   echo "🌱 [Hamravesh Darkube] Admin credentials detected. Ensuring admin user exists..."
   node make-admin.js || echo "⚠️ [Hamravesh Darkube] make-admin note: could not run make-admin."
-  npm run db:seed || echo "ℹ️ [Hamravesh Darkube] Seed finished or already populated."
+  if [ ! -f "/app/data/.seeded" ]; then
+    echo "🌱 [Hamravesh Darkube] First boot on persistent disk. Seeding initial categories..."
+    npm run db:seed && touch /app/data/.seeded || echo "ℹ️ [Hamravesh Darkube] Seed notice."
+  else
+    echo "✅ [Hamravesh Darkube] Database already initialized on persistent disk. Skipping seed to preserve custom admin settings."
+  fi
 fi
 
 echo "✨ [Hamravesh Darkube] Abol Store is ready! Starting web server on port ${PORT:-3000}..."

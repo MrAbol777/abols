@@ -27,7 +27,8 @@ export async function saveSettingsAction(
     supportText: String(formData.get("supportText") ?? ""),
   });
   if (!parsed.success) {
-    return { status: "error", message: "اطلاعات معتبر نیست." };
+    const msg = parsed.error.issues[0]?.message || "اطلاعات معتبر نیست.";
+    return { status: "error", message: msg };
   }
   const d = parsed.data;
   await prisma.siteSetting.upsert({

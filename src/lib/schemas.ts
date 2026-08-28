@@ -180,8 +180,8 @@ export const settingsSchema = z.object({
   successfulOrders: z.coerce.number().int().min(0).max(10_000_000),
   cardHolderName: z.string().max(100).optional().or(z.literal("")),
   cardNumber: z.string().max(50).optional().or(z.literal("")),
-  telegramUrl: z.string().url("آدرس تلگرام معتبر نیست").max(500).optional().or(z.literal("")),
-  rubikaUrl: z.string().url("آدرس روبیکا معتبر نیست").max(500).optional().or(z.literal("")),
+  telegramUrl: z.string().max(500).optional().or(z.literal("")),
+  rubikaUrl: z.string().max(500).optional().or(z.literal("")),
   supportText: z.string().max(1000).optional().or(z.literal("")),
 });
 
