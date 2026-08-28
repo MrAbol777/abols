@@ -1,13 +1,8 @@
 # -----------------------------------------------------------------------------
-# Base Image: Debian Bookworm slim with Node 20 LTS and OpenSSL
+# Dependencies Stage: Use full Node 22 with pre-installed Python & C++ tools
+# (Required by better-sqlite3@13 and Prisma streams which require Node >= 22)
 # -----------------------------------------------------------------------------
-FROM node:20-slim AS base
-WORKDIR /app
-
-# -----------------------------------------------------------------------------
-# Dependencies Stage: Install npm dependencies
-# -----------------------------------------------------------------------------
-FROM base AS deps
+FROM node:22 AS deps
 WORKDIR /app
 COPY package.json package-lock.json ./
 COPY prisma ./prisma/
@@ -16,7 +11,7 @@ RUN npm ci
 # -----------------------------------------------------------------------------
 # Builder Stage: Generate Prisma Client & Build Next.js
 # -----------------------------------------------------------------------------
-FROM base AS builder
+FROM node:22 AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
@@ -32,9 +27,9 @@ RUN npx prisma generate
 RUN npm run build
 
 # -----------------------------------------------------------------------------
-# Production Runner Stage: Optimized container for Hamravesh Darkube
+# Production Runner Stage: Minimal Node 22 container for Hamravesh Darkube
 # -----------------------------------------------------------------------------
-FROM base AS runner
+FROM node:22-slim AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
