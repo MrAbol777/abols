@@ -19,3 +19,16 @@ db.prepare(`
 `).run(phone, hash, now, now);
 
 console.log("✅ Admin user ready for phone:", phone);
+
+// Remove default sample products completely
+try {
+  db.prepare("DELETE FROM ProductCheckoutField").run();
+  db.prepare("DELETE FROM ProductAttribute").run();
+  db.prepare("DELETE FROM ProductMedia").run();
+  db.prepare("DELETE FROM Review").run();
+  db.prepare("DELETE FROM Product").run();
+  console.log("🧹 Default products cleared completely from database.");
+} catch (e) {
+  console.log("Product cleanup note:", e.message);
+}
+

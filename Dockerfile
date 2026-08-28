@@ -19,6 +19,7 @@ COPY . .
 # Set build-time defaults so static route generation succeeds
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
+ENV NODE_OPTIONS="--max-old-space-size=1536"
 ENV DATABASE_URL="file:./dev.db"
 ENV AUTH_SECRET="build-secret-placeholder-minimum-32-characters"
 

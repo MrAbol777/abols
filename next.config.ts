@@ -13,6 +13,7 @@ const nextConfig: NextConfig = {
   // Exclude native modules from serverless bundling (better-sqlite3 is native)
   serverExternalPackages: ["better-sqlite3"],
   experimental: {
+    cpus: 2,
     serverActions: {
       bodySizeLimit: "8mb",
     },
