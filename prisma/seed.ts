@@ -68,13 +68,7 @@ async function main() {
   });
   console.log(`✅ Categories: ${cpCategory.name}, ${accountCategory.name}, ${comboCategory.name}`);
 
-  // 3. Clear any default products completely
-  await prisma.productCheckoutField.deleteMany();
-  await prisma.productAttribute.deleteMany();
-  await prisma.productMedia.deleteMany();
-  await prisma.review.deleteMany();
-  await prisma.product.deleteMany();
-  console.log("🧹 Default products removed completely. You can add your own products via admin panel.");
+
 
   // 6. SITE SETTINGS (singleton)
   await prisma.siteSetting.upsert({
