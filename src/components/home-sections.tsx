@@ -205,8 +205,8 @@ export function AboutPreview() {
     <section className="py-14">
       <Container>
         <div className="grid grid-cols-1 items-center gap-8 rounded-3xl border border-border bg-gradient-to-br from-surface to-elevated p-8 lg:grid-cols-2 lg:p-12">
-          <div className="flex flex-col gap-4">
-            <Badge tone="gold">درباره ابول استور</Badge>
+          <div className="flex flex-col items-start gap-4">
+            <Badge tone="gold" className="self-start">درباره ابول استور</Badge>
             <h2 className="text-2xl font-extrabold text-foreground sm:text-3xl">
               فروشگاه تخصصی محصولات دیجیتال کالاف دیوتی
             </h2>
