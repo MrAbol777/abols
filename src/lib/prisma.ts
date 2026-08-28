@@ -1,14 +1,17 @@
 import { PrismaClient } from "../generated/prisma/client";
-import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
+import { PrismaPg } from "@prisma/adapter-pg";
+import { Pool } from "pg";
 
 const databaseUrl =
   process.env.DATABASE_URL ||
-  (process.env.NODE_ENV === "production"
-    ? "file:/app/data/prod.db"
-    : "file:./dev.db");
+  "postgresql://postgres.duamgctajmmzvyjxprnq:FDKCpZ4jLi91psUX@aws-0-ap-northeast-2.pooler.supabase.com:5432/postgres";
 
-// The better-sqlite3 adapter parses the `file:` URL and manages the connection.
-const adapter = new PrismaBetterSqlite3({ url: databaseUrl });
+const pool = new Pool({
+  connectionString: databaseUrl,
+  ssl: { rejectUnauthorized: false },
+});
+
+const adapter = new PrismaPg(pool);
 
 // Singleton pattern for Next.js dev (prevents exhausting connections on HMR).
 const globalForPrisma = globalThis as unknown as {

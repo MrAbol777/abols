@@ -11,7 +11,7 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   output: "standalone",
   // Exclude native modules from serverless bundling (better-sqlite3 is native)
-  serverExternalPackages: ["better-sqlite3"],
+  serverExternalPackages: ["better-sqlite3", "pg"],
   experimental: {
     cpus: 2,
     serverActions: {

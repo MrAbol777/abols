@@ -11,8 +11,6 @@ export default defineConfig({
   datasource: {
     url:
       process.env.DATABASE_URL ||
-      (process.env.NODE_ENV === "production"
-        ? "file:/app/data/prod.db"
-        : "file:./dev.db"),
+      "postgresql://postgres.duamgctajmmzvyjxprnq:FDKCpZ4jLi91psUX@aws-0-ap-northeast-2.pooler.supabase.com:5432/postgres",
   },
 });

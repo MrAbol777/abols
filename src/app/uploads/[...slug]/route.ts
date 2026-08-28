@@ -33,7 +33,7 @@ export async function GET(
 
   let resolvedPath: string | null = null;
   for (const p of candidatePaths) {
-    if (fs.existsSync(p) && fs.statSync(p).isFile()) {
+    if (fs.existsSync(/*turbopackIgnore: true*/ p) && fs.statSync(/*turbopackIgnore: true*/ p).isFile()) {
       resolvedPath = p;
       break;
     }
@@ -46,7 +46,7 @@ export async function GET(
   try {
     const ext = path.extname(resolvedPath).toLowerCase();
     const contentType = MIME_TYPES[ext] || "application/octet-stream";
-    const fileBuffer = fs.readFileSync(resolvedPath);
+    const fileBuffer = fs.readFileSync(/*turbopackIgnore: true*/ resolvedPath);
 
     return new NextResponse(fileBuffer, {
       status: 200,

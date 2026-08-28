@@ -20,7 +20,7 @@ COPY . .
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_OPTIONS="--max-old-space-size=1536"
-ENV DATABASE_URL="file:./dev.db"
+ENV DATABASE_URL="postgresql://postgres.duamgctajmmzvyjxprnq:FDKCpZ4jLi91psUX@aws-0-ap-northeast-2.pooler.supabase.com:5432/postgres"
 ENV AUTH_SECRET="build-secret-placeholder-minimum-32-characters"
 
 # Generate Prisma client and build standalone bundle
