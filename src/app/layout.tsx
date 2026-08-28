@@ -33,6 +33,14 @@ export const metadata: Metadata = {
       "خرید مطمئن CP، اکانت و کمبو کالاف دیوتی موبایل با فرایند ساده و پشتیبانی در دسترس.",
   },
   robots: { index: true, follow: true },
+  icons: {
+    icon: [
+      { url: "/logo.png", sizes: "any" },
+      { url: "/icon.png", type: "image/png" },
+    ],
+    shortcut: "/logo.png",
+    apple: "/logo.png",
+  },
 };
 
 export const viewport: Viewport = {
